@@ -1,0 +1,62 @@
+---
+title: "eda_on_crime_rates_chicago"
+output: html_document
+date: "2023-08-02"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library("ggplot2")
+```
+
+```{r cars}
+chicago_crime <- read.csv("C:\\Users\\hp\\OneDrive\\codes\\r_projets\\crimes_rates\\Crimes_-_2001_to_Present.csv")
+```
+
+```{r pressure, echo=FALSE}
+# Convert Date and Time columns to the date-time format
+chicago_crime$Date <- mdy_hms(chicago_crime$Date)
+```
+
+```{r}
+# Remove missing or invalid data
+chicago_crime <- na.omit(chicago_crime)
+```
+
+```{r}
+# Summary Statistics
+summary(chicago_crime)
+```
+
+```{r}
+# Distribution of Crime Types
+ggplot(chicago_crime, aes(x = Primary.Type)) + 
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  ggtitle("Distribution of Crime Types")
+```
+
+
+```{r}
+# Distribution of Crime by Year
+ggplot(chicago_crime, aes(x = year(Date))) + 
+  geom_bar() + 
+  ggtitle("Distribution of Crime by Year")
+```
+
+```{r}
+# Distribution of Crime by Month
+ggplot(chicago_crime, aes(x = month(Date, label = TRUE))) + 
+  geom_bar() + 
+  scale_x_discrete(labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) + 
+  ggtitle("Distribution of Crime by Month")
+```
+
+```{r}
+# Create a bar chart of crime counts by type of crime
+ggplot(chicago_crime, aes(x = Primary.Type)) +
+  geom_bar() +
+  labs(title = "Crime Count by Type of Crime", x = "Type of Crime", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
